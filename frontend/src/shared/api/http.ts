@@ -1,0 +1,11 @@
+import axios from 'axios';
+import { env } from '@/shared/config/env';
+
+export const http = axios.create({
+  baseURL: env.apiBaseUrl,
+  withCredentials: false,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+});
