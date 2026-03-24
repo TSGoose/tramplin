@@ -8,6 +8,9 @@ use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use App\Models\ApplicantProfile;
+use App\Models\Company;
+use App\Models\Opportunity;
+use App\Models\Tag;
 
 final class DatabaseSeeder extends Seeder
 {
@@ -72,5 +75,51 @@ final class DatabaseSeeder extends Seeder
                 'role' => UserRole::Employer,
             ],
         );
+
+        $tags = collect([
+            ['name' => 'Vue', 'slug' => 'vue', 'group' => 'stack'],
+            ['name' => 'Laravel', 'slug' => 'laravel', 'group' => 'stack'],
+            ['name' => 'TypeScript', 'slug' => 'typescript', 'group' => 'stack'],
+            ['name' => 'Remote', 'slug' => 'remote', 'group' => 'format'],
+            ['name' => 'Junior', 'slug' => 'junior', 'group' => 'level'],
+            ['name' => 'Internship', 'slug' => 'internship', 'group' => 'type'],
+        ])->map(static fn (array $tag): Tag => Tag::query()->updateOrCreate(
+            ['slug' => $tag['slug']],
+            $tag,
+        ));
+
+        $employerUser = User::query()->where('email', 'employer@tramplin.local')->first();
+
+        if ($employerUser !== null) {
+            $company = Company::query()->updateOrCreate(
+                ['owner_user_id' => $employerUser->id],
+                [
+                    'name' => 'Digital Horizon',
+                    'description' => 'Технологическая компания-партнер.',
+                    'industry' => 'IT',
+                    'website_url' => 'https://digital-horizon.example',
+                    'social_url' => 'https://t.me/digital_horizon',
+                    'inn' => '7701234567',
+                    'city' => 'Москва',
+                    'address' => 'ул. Тверская, 7',
+                    'verification_status' => 'verified',
+                    'verified_at' => now(),
+                ],
+            );
+
+            if (Opportunity::query()->count() < 20) {
+                Opportunity::factory()
+                    ->count(20)
+                    ->for($company)
+                    ->create()
+                    ->each(static function (Opportunity $opportunity) use ($tags): void {
+                        $opportunity->tags()->sync(
+                            $tags->random(random_int(2, 4))->pluck('id')->all()
+                        );
+                    });
+            }
+        }
+
+
     }
 }
