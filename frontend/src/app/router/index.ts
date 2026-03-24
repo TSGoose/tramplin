@@ -5,6 +5,8 @@ import LoginPage from '@/pages/auth/LoginPage.vue';
 import CuratorLoginPage from '@/pages/auth/CuratorLoginPage.vue';
 import RegisterApplicantPage from '@/pages/auth/RegisterApplicantPage.vue';
 import RegisterEmployerPage from '@/pages/auth/RegisterEmployerPage.vue';
+import ApplicantProfilePage from '@/pages/applicant/ApplicantProfilePage.vue';
+import { useAuthStore } from '@/features/auth/model/auth.store';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -36,6 +38,15 @@ const routes: RouteRecordRaw[] = [
         name: 'register-employer',
         component: RegisterEmployerPage,
       },
+      {
+        path: 'applicant/profile',
+        name: 'applicant-profile',
+        component: ApplicantProfilePage,
+        meta: {
+          requiresAuth: true,
+          roles: ['applicant'],
+        },
+      },
     ],
   },
 ];
@@ -46,6 +57,31 @@ const router = createRouter({
   scrollBehavior(): { top: number } {
     return { top: 0 };
   },
+});
+
+router.beforeEach(async (to) => {
+  const authStore = useAuthStore();
+
+  if (authStore.token && !authStore.user) {
+    try {
+      await authStore.fetchMe();
+    } catch {
+      authStore.clearAuth();
+    }
+  }
+
+  const requiresAuth = Boolean(to.meta.requiresAuth);
+  const allowedRoles = Array.isArray(to.meta.roles) ? to.meta.roles : null;
+
+  if (requiresAuth && !authStore.isAuthenticated) {
+    return { name: 'login' };
+  }
+
+  if (allowedRoles && authStore.user && !allowedRoles.includes(authStore.user.role)) {
+    return { name: 'home' };
+  }
+
+  return true;
 });
 
 export default router;

@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\CurrentUserResource;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
 
-final class AuthenticatedUserController
+final class AuthenticatedUserController extends Controller
 {
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResource
     {
-        return response()->json([
-            'data' => new CurrentUserResource($request->user()),
-        ]);
+        return CurrentUserResource::make($request->user());
     }
 }

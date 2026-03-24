@@ -11,13 +11,27 @@ enum UserRole: string
     case Curator = 'curator';
     case Admin = 'admin';
 
-    public function label(): string
+    public function isPubliclyRegisterable(): bool
     {
         return match ($this) {
-            self::Applicant => 'Соискатель',
-            self::Employer => 'Работодатель',
-            self::Curator => 'Куратор',
-            self::Admin => 'Администратор',
+            self::Applicant, self::Employer => true,
+            self::Curator, self::Admin => false,
+        };
+    }
+
+    public function canUsePublicLogin(): bool
+    {
+        return match ($this) {
+            self::Applicant, self::Employer => true,
+            self::Curator, self::Admin => false,
+        };
+    }
+
+    public function canUseCuratorLogin(): bool
+    {
+        return match ($this) {
+            self::Curator, self::Admin => true,
+            self::Applicant, self::Employer => false,
         };
     }
 }

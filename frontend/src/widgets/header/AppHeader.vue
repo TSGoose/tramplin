@@ -26,7 +26,23 @@
         </RouterLink>
       </nav>
 
-      <div class="flex items-center gap-2">
+      <div v-if="authStore.isAuthenticated && authStore.user" class="flex items-center gap-3">
+        <RouterLink
+          v-if="authStore.user.role === 'applicant'"
+          to="/applicant/profile"
+          class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
+        >
+          Профиль
+        </RouterLink>
+
+        <div class="hidden text-right sm:block">
+          <p class="text-sm font-medium text-slate-900">{{ authStore.user.display_name }}</p>
+          <p class="text-xs uppercase tracking-wide text-slate-500">{{ authStore.user.role }}</p>
+        </div>
+        <UiButton variant="secondary" @click="onLogout">Выйти</UiButton>
+      </div>
+
+      <div v-else class="flex items-center gap-2">
         <RouterLink to="/login/curator">
           <UiButton variant="ghost">Куратор</UiButton>
         </RouterLink>
@@ -39,6 +55,16 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import UiContainer from '@/shared/ui/UiContainer.vue';
 import UiButton from '@/shared/ui/UiButton.vue';
+import { useAuthStore } from '@/features/auth/model/auth.store';
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+async function onLogout(): Promise<void> {
+  await authStore.logout();
+  await router.push('/');
+}
 </script>
