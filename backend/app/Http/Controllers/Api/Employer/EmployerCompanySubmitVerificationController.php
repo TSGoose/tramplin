@@ -27,6 +27,10 @@ final class EmployerCompanySubmitVerificationController extends Controller
             throw new HttpException(422, 'Для отправки на верификацию заполните название, описание и сайт компании.');
         }
 
+        if ($company->verification_status === CompanyVerificationStatus::Verified) {
+            throw new HttpException(422, 'Компания уже верифицирована.');
+        }
+
         $company->verification_status = CompanyVerificationStatus::PendingVerification;
         $company->verification_comment = null;
         $company->save();

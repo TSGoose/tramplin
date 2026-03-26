@@ -34,7 +34,12 @@ final class EmployerOpportunitySubmitController extends Controller
             throw new HttpException(422, 'Опубликовать возможность можно только после верификации компании.');
         }
 
+        if (!in_array($opportunity->status, [OpportunityStatus::Draft, OpportunityStatus::NeedsRevision], true)) {
+            throw new HttpException(422, 'Эту возможность нельзя повторно отправить на модерацию из текущего статуса.');
+        }
+
         $opportunity->status = OpportunityStatus::PendingModeration;
+        $opportunity->moderation_comment = null;
         $opportunity->save();
         $opportunity->refresh();
         $opportunity->load(['company', 'tags']);

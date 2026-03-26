@@ -27,12 +27,26 @@
             <p class="mt-1 text-lg font-semibold text-slate-900">{{ verificationLabel }}</p>
           </div>
 
-          <UiButton
+          <UiCard
+            v-if="employerStore.company?.verification_comment"
+            className="mb-6 border border-amber-200 bg-amber-50 p-6"
+          >
+            <h2 class="text-lg font-semibold text-amber-900">Замечание куратора</h2>
+            <p class="mt-2 text-sm leading-6 text-amber-800">
+              {{ employerStore.company.verification_comment }}
+            </p>
+          </UiCard>
+
+        <UiButton
             variant="secondary"
             :disabled="employerStore.isSubmitting"
             @click="onSubmitForVerification"
           >
-            Отправить на верификацию
+            {{
+              employerStore.company?.verification_status === 'needs_revision'
+                ? 'Отправить повторно'
+                : 'Отправить на верификацию'
+            }}
           </UiButton>
         </div>
 

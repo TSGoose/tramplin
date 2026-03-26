@@ -11,6 +11,7 @@ import OpportunitiesPage from '@/pages/opportunities/OpportunitiesPage.vue';
 import OpportunityDetailsPage from '@/pages/opportunities/OpportunityDetailsPage.vue';
 import ApplicantFavoritesPage from '@/pages/applicant/ApplicantFavoritesPage.vue';
 import ApplicantApplicationsPage from '@/pages/applicant/ApplicantApplicationsPage.vue';
+import EmployerOpportunityEditPage from '@/pages/employer/EmployerOpportunityEditPage.vue';
 import EmployerCompanyPage from '@/pages/employer/EmployerCompanyPage.vue';
 import EmployerOpportunitiesPage from '@/pages/employer/EmployerOpportunitiesPage.vue';
 import EmployerOpportunityCreatePage from '@/pages/employer/EmployerOpportunityCreatePage.vue';
@@ -137,6 +138,15 @@ const routes: RouteRecordRaw[] = [
         meta: {
           requiresAuth: true,
           roles: ['curator', 'admin'],
+        },
+      },
+      {
+        path: 'employer/opportunities/:id/edit',
+        name: 'employer-opportunity-edit',
+        component: EmployerOpportunityEditPage,
+        meta: {
+          requiresAuth: true,
+          roles: ['employer'],
         },
       },
     ],

@@ -61,18 +61,35 @@
               {{ item.short_description || 'Описание пока не заполнено.' }}
             </p>
 
+            <div
+              v-if="item.moderation_comment"
+              class="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800"
+            >
+              <span class="font-medium text-amber-900">Замечание куратора:</span>
+              {{ item.moderation_comment }}
+            </div>
+
             <div class="flex flex-wrap gap-2">
               <UiBadge v-if="item.city">{{ item.city }}</UiBadge>
               <UiBadge v-if="item.work_format" variant="warning">{{ workFormatLabel(item.work_format) }}</UiBadge>
             </div>
-            <UiButton
-              v-if="item.status === 'draft'"
-              variant="secondary"
-              :disabled="employerStore.isSubmitting"
-              @click="onSubmit(item.id)"
-            >
-              Отправить на модерацию
-            </UiButton>
+          <div class="flex flex-wrap items-center gap-2">
+              <RouterLink
+                v-if="item.status === 'needs_revision'"
+                :to="`/employer/opportunities/${item.id}/edit`"
+              >
+                <UiButton variant="secondary">Исправить</UiButton>
+              </RouterLink>
+
+              <UiButton
+                v-if="item.status === 'draft'"
+                variant="secondary"
+                :disabled="employerStore.isSubmitting"
+                @click="onSubmit(item.id)"
+              >
+                Отправить на модерацию
+              </UiButton>
+            </div>
           </div>
         </UiCard>
       </div>

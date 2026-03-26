@@ -12,6 +12,11 @@ export async function updateEmployerCompany(payload: UpdateCompanyPayload): Prom
   return data;
 }
 
+export async function fetchEmployerOpportunity(id: number): Promise<{ data: Opportunity }> {
+  const { data } = await http.get<{ data: Opportunity }>(`/employer/opportunities/${id}`);
+  return data;
+}
+
 export async function submitEmployerCompanyVerification(): Promise<{ data: Company }> {
   const { data } = await http.post<{ data: Company }>('/employer/company/verification-submit');
   return data;
