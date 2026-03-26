@@ -33,7 +33,28 @@
         </UiButton>
       </div>
 
-      <div v-if="catalogStore.isLoading" class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <UiButton
+          :variant="viewMode === 'grid' ? 'primary' : 'secondary'"
+          @click="viewMode = 'grid'"
+        >
+          Список
+        </UiButton>
+        <UiButton
+          :variant="viewMode === 'map' ? 'primary' : 'secondary'"
+          @click="viewMode = 'map'"
+        >
+          Карта
+        </UiButton>
+        <UiButton
+          :variant="viewMode === 'split' ? 'primary' : 'secondary'"
+          @click="viewMode = 'split'"
+        >
+          Гибрид
+        </UiButton>
+      </div>
+
+    <div v-if="catalogStore.isLoading" class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <UiCard
           v-for="index in 6"
           :key="index"
@@ -57,6 +78,22 @@
         </UiCard>
       </div>
 
+      <div v-else-if="viewMode === 'map'" class="mt-8">
+        <OpportunityMap :opportunities="mappableOpportunities" />
+      </div>
+
+      <div v-else-if="viewMode === 'split'" class="mt-8 grid gap-6 xl:grid-cols-[1fr_1fr]">
+        <div class="grid gap-4">
+          <OpportunityCard
+            v-for="opportunity in catalogStore.opportunities"
+            :key="opportunity.id"
+            :opportunity="opportunity"
+          />
+        </div>
+
+        <OpportunityMap :opportunities="mappableOpportunities" />
+      </div>
+
       <div v-else class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <OpportunityCard
           v-for="opportunity in catalogStore.opportunities"
@@ -69,7 +106,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { useAuthStore } from '@/features/auth/model/auth.store';
 import { useFavoritesStore } from '@/features/favorites/model/favorites.store';
 import OpportunityCard from '@/widgets/opportunities/OpportunityCard.vue';
@@ -77,8 +113,11 @@ import OpportunityFilters from '@/widgets/opportunities/OpportunityFilters.vue';
 import UiAlert from '@/shared/ui/UiAlert.vue';
 import UiButton from '@/shared/ui/UiButton.vue';
 import UiCard from '@/shared/ui/UiCard.vue';
+import { computed, onMounted, ref } from 'vue';
+import OpportunityMap from '@/widgets/opportunities/OpportunityMap.vue';
 import UiContainer from '@/shared/ui/UiContainer.vue';
 import { useOpportunityCatalogStore } from '@/features/opportunity-catalog/model/opportunityCatalog.store';
+
 
 const catalogStore = useOpportunityCatalogStore();
 
@@ -95,6 +134,14 @@ onMounted(async () => {
     await favoritesStore.loadFavorites();
   }
 });
+
+const viewMode = ref<'grid' | 'map' | 'split'>('split');
+
+const mappableOpportunities = computed(() =>
+  catalogStore.opportunities.filter(
+    (item) => item.latitude !== null && item.longitude !== null,
+  ),
+);
 
 async function onApplyFilters(): Promise<void> {
   await catalogStore.loadCatalog();
