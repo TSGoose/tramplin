@@ -7,6 +7,13 @@ import RegisterApplicantPage from '@/pages/auth/RegisterApplicantPage.vue';
 import RegisterEmployerPage from '@/pages/auth/RegisterEmployerPage.vue';
 import ApplicantProfilePage from '@/pages/applicant/ApplicantProfilePage.vue';
 import { useAuthStore } from '@/features/auth/model/auth.store';
+import OpportunitiesPage from '@/pages/opportunities/OpportunitiesPage.vue';
+import OpportunityDetailsPage from '@/pages/opportunities/OpportunityDetailsPage.vue';
+import ApplicantFavoritesPage from '@/pages/applicant/ApplicantFavoritesPage.vue';
+import ApplicantApplicationsPage from '@/pages/applicant/ApplicantApplicationsPage.vue';
+import EmployerCompanyPage from '@/pages/employer/EmployerCompanyPage.vue';
+import EmployerOpportunitiesPage from '@/pages/employer/EmployerOpportunitiesPage.vue';
+import EmployerOpportunityCreatePage from '@/pages/employer/EmployerOpportunityCreatePage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -45,6 +52,61 @@ const routes: RouteRecordRaw[] = [
         meta: {
           requiresAuth: true,
           roles: ['applicant'],
+        },
+      },
+      {
+        path: 'opportunities',
+        name: 'opportunities',
+        component: OpportunitiesPage,
+      },
+      {
+        path: 'opportunities/:id',
+        name: 'opportunity-details',
+        component: OpportunityDetailsPage,
+      },
+      {
+        path: 'applicant/favorites',
+        name: 'applicant-favorites',
+        component: ApplicantFavoritesPage,
+        meta: {
+          requiresAuth: true,
+          roles: ['applicant'],
+        },
+      },
+      {
+        path: 'applicant/applications',
+        name: 'applicant-applications',
+        component: ApplicantApplicationsPage,
+        meta: {
+          requiresAuth: true,
+          roles: ['applicant'],
+        },
+      },
+      {
+        path: 'employer/company',
+        name: 'employer-company',
+        component: EmployerCompanyPage,
+        meta: {
+          requiresAuth: true,
+          roles: ['employer'],
+        },
+      },
+      {
+        path: 'employer/opportunities',
+        name: 'employer-opportunities',
+        component: EmployerOpportunitiesPage,
+        meta: {
+          requiresAuth: true,
+          roles: ['employer'],
+        },
+      },
+      {
+        path: 'employer/opportunities/new',
+        name: 'employer-opportunity-create',
+        component: EmployerOpportunityCreatePage,
+        meta: {
+          requiresAuth: true,
+          roles: ['employer'],
         },
       },
     ],

@@ -15,6 +15,9 @@
         <RouterLink class="text-sm text-slate-600 transition hover:text-slate-900" to="/">
           Главная
         </RouterLink>
+        <RouterLink class="text-sm text-slate-600 transition hover:text-slate-900" to="/opportunities">
+          Возможности
+        </RouterLink>
         <RouterLink class="text-sm text-slate-600 transition hover:text-slate-900" to="/login">
           Вход
         </RouterLink>
@@ -28,11 +31,43 @@
 
       <div v-if="authStore.isAuthenticated && authStore.user" class="flex items-center gap-3">
         <RouterLink
+          v-if="authStore.user.role === 'employer'"
+          to="/employer/company"
+          class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
+        >
+          Компания
+        </RouterLink>
+
+        <RouterLink
+          v-if="authStore.user.role === 'employer'"
+          to="/employer/opportunities"
+          class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
+        >
+          Мои возможности
+        </RouterLink>
+
+        <RouterLink
           v-if="authStore.user.role === 'applicant'"
           to="/applicant/profile"
           class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
         >
           Профиль
+        </RouterLink>
+
+        <RouterLink
+          v-if="authStore.user.role === 'applicant'"
+          to="/applicant/favorites"
+          class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
+        >
+          Избранное
+        </RouterLink>
+
+        <RouterLink
+          v-if="authStore.user.role === 'applicant'"
+          to="/applicant/applications"
+          class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
+        >
+          Отклики
         </RouterLink>
 
         <div class="hidden text-right sm:block">

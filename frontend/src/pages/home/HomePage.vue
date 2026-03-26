@@ -1,6 +1,11 @@
 <template>
   <div>
     <HomeHero />
+    <div class="mt-6">
+      <RouterLink to="/opportunities">
+        <UiButton variant="secondary">Открыть каталог возможностей</UiButton>
+      </RouterLink>
+    </div>
 
     <section class="page-section pt-0">
       <UiContainer>

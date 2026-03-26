@@ -40,3 +40,9 @@
     </div>
   </section>
 </template>
+<script setup lang="ts">
+import HomeHero from '@/widgets/hero/HomeHero.vue';
+import UiButton from '@/shared/ui/UiButton.vue';
+import UiCard from '@/shared/ui/UiCard.vue';
+import UiContainer from '@/shared/ui/UiContainer.vue';
+</script>
