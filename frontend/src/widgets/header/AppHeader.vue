@@ -31,6 +31,30 @@
 
       <div v-if="authStore.isAuthenticated && authStore.user" class="flex items-center gap-3">
         <RouterLink
+          v-if="authStore.user.role === 'curator' || authStore.user.role === 'admin'"
+          to="/curator/companies"
+          class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
+        >
+          Компании
+        </RouterLink>
+
+        <RouterLink
+          v-if="authStore.user.role === 'curator' || authStore.user.role === 'admin'"
+          to="/curator/opportunities"
+          class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
+        >
+          Модерация
+        </RouterLink>
+
+        <RouterLink
+          v-if="authStore.user.role === 'curator' || authStore.user.role === 'admin'"
+          to="/curator/audit-logs"
+          class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
+        >
+          Журнал
+        </RouterLink>
+       
+        <RouterLink
           v-if="authStore.user.role === 'employer'"
           to="/employer/company"
           class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"

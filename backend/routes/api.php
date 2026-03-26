@@ -25,6 +25,11 @@ use App\Http\Controllers\Api\Employer\EmployerOpportunityShowController;
 use App\Http\Controllers\Api\Employer\EmployerOpportunityStoreController;
 use App\Http\Controllers\Api\Employer\EmployerOpportunitySubmitController;
 use App\Http\Controllers\Api\Employer\EmployerOpportunityUpdateController;
+use App\Http\Controllers\Api\Curator\CuratorAuditLogIndexController;
+use App\Http\Controllers\Api\Curator\CuratorCompanyIndexController;
+use App\Http\Controllers\Api\Curator\CuratorCompanyModerationController;
+use App\Http\Controllers\Api\Curator\CuratorOpportunityIndexController;
+use App\Http\Controllers\Api\Curator\CuratorOpportunityModerationController;
 use App\Http\Controllers\Api\Tag\TagIndexController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
@@ -71,4 +76,13 @@ Route::middleware('auth:sanctum')->group(static function (): void {
     Route::get('/employer/opportunities/{opportunity}', EmployerOpportunityShowController::class);
     Route::put('/employer/opportunities/{opportunity}', EmployerOpportunityUpdateController::class);
     Route::post('/employer/opportunities/{opportunity}/submit', EmployerOpportunitySubmitController::class);
+
+
+    Route::get('/curator/companies', CuratorCompanyIndexController::class);
+    Route::patch('/curator/companies/{company}/status', CuratorCompanyModerationController::class);
+
+    Route::get('/curator/opportunities', CuratorOpportunityIndexController::class);
+    Route::patch('/curator/opportunities/{opportunity}/status', CuratorOpportunityModerationController::class);
+
+    Route::get('/curator/audit-logs', CuratorAuditLogIndexController::class);
 });

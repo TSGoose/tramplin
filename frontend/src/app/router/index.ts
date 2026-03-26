@@ -14,6 +14,9 @@ import ApplicantApplicationsPage from '@/pages/applicant/ApplicantApplicationsPa
 import EmployerCompanyPage from '@/pages/employer/EmployerCompanyPage.vue';
 import EmployerOpportunitiesPage from '@/pages/employer/EmployerOpportunitiesPage.vue';
 import EmployerOpportunityCreatePage from '@/pages/employer/EmployerOpportunityCreatePage.vue';
+import CuratorCompaniesPage from '@/pages/curator/CuratorCompaniesPage.vue';
+import CuratorOpportunitiesPage from '@/pages/curator/CuratorOpportunitiesPage.vue';
+import CuratorAuditLogsPage from '@/pages/curator/CuratorAuditLogsPage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -107,6 +110,33 @@ const routes: RouteRecordRaw[] = [
         meta: {
           requiresAuth: true,
           roles: ['employer'],
+        },
+      },
+      {
+        path: 'curator/companies',
+        name: 'curator-companies',
+        component: CuratorCompaniesPage,
+        meta: {
+          requiresAuth: true,
+          roles: ['curator', 'admin'],
+        },
+      },
+      {
+        path: 'curator/opportunities',
+        name: 'curator-opportunities',
+        component: CuratorOpportunitiesPage,
+        meta: {
+          requiresAuth: true,
+          roles: ['curator', 'admin'],
+        },
+      },
+      {
+        path: 'curator/audit-logs',
+        name: 'curator-audit-logs',
+        component: CuratorAuditLogsPage,
+        meta: {
+          requiresAuth: true,
+          roles: ['curator', 'admin'],
         },
       },
     ],
