@@ -12,6 +12,19 @@ use App\Http\Controllers\Api\Auth\RegisterApplicantController;
 use App\Http\Controllers\Api\Auth\RegisterEmployerController;
 use App\Http\Controllers\Api\Opportunity\OpportunityIndexController;
 use App\Http\Controllers\Api\Opportunity\OpportunityShowController;
+use App\Http\Controllers\Api\Applicant\ApplicationIndexController;
+use App\Http\Controllers\Api\Applicant\DeleteFavoriteController;
+use App\Http\Controllers\Api\Applicant\FavoriteIndexController;
+use App\Http\Controllers\Api\Applicant\StoreApplicationController;
+use App\Http\Controllers\Api\Applicant\StoreFavoriteController;
+use App\Http\Controllers\Api\Employer\EmployerCompanyShowController;
+use App\Http\Controllers\Api\Employer\EmployerCompanySubmitVerificationController;
+use App\Http\Controllers\Api\Employer\EmployerCompanyUpdateController;
+use App\Http\Controllers\Api\Employer\EmployerOpportunityIndexController;
+use App\Http\Controllers\Api\Employer\EmployerOpportunityShowController;
+use App\Http\Controllers\Api\Employer\EmployerOpportunityStoreController;
+use App\Http\Controllers\Api\Employer\EmployerOpportunitySubmitController;
+use App\Http\Controllers\Api\Employer\EmployerOpportunityUpdateController;
 use App\Http\Controllers\Api\Tag\TagIndexController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
@@ -42,4 +55,20 @@ Route::get('/tags', TagIndexController::class);
 Route::middleware('auth:sanctum')->group(static function (): void {
     Route::get('/applicant/profile', ApplicantProfileController::class);
     Route::put('/applicant/profile', UpdateApplicantProfileController::class);
+    Route::get('/applicant/favorites', FavoriteIndexController::class);
+    Route::post('/applicant/favorites/{opportunity}', StoreFavoriteController::class);
+    Route::delete('/applicant/favorites/{opportunity}', DeleteFavoriteController::class);
+
+    Route::get('/applicant/applications', ApplicationIndexController::class);
+    Route::post('/applicant/applications', StoreApplicationController::class);
+
+    Route::get('/employer/company', EmployerCompanyShowController::class);
+    Route::put('/employer/company', EmployerCompanyUpdateController::class);
+    Route::post('/employer/company/verification-submit', EmployerCompanySubmitVerificationController::class);
+
+    Route::get('/employer/opportunities', EmployerOpportunityIndexController::class);
+    Route::post('/employer/opportunities', EmployerOpportunityStoreController::class);
+    Route::get('/employer/opportunities/{opportunity}', EmployerOpportunityShowController::class);
+    Route::put('/employer/opportunities/{opportunity}', EmployerOpportunityUpdateController::class);
+    Route::post('/employer/opportunities/{opportunity}/submit', EmployerOpportunitySubmitController::class);
 });

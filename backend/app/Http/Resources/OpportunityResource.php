@@ -22,6 +22,7 @@ final class OpportunityResource extends JsonResource
             'work_format' => $this->resource->work_format?->value,
             'employment_type' => $this->resource->employment_type?->value,
             'level' => $this->resource->level?->value,
+            'status' => $this->resource->status?->value,
             'city' => $this->resource->city,
             'address' => $this->resource->address,
             'latitude' => $this->resource->latitude,

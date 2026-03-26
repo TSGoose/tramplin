@@ -8,6 +8,7 @@ use Database\Factories\CompanyFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Enums\CompanyVerificationStatus;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class Company extends Model
@@ -34,6 +35,8 @@ final class Company extends Model
     {
         return [
             'verified_at' => 'datetime',
+            'verification_status' => CompanyVerificationStatus::class,
+            'verified_at' => 'datetime',
         ];
     }
 
@@ -46,4 +49,5 @@ final class Company extends Model
     {
         return $this->hasMany(Opportunity::class);
     }
+
 }

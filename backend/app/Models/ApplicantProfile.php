@@ -9,6 +9,7 @@ use App\Enums\ProfilePrivacyLevel;
 use Database\Factories\ApplicantProfileFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -60,6 +61,11 @@ final class ApplicantProfile extends Model
             'preferred_work_formats' => 'array',
             'preferred_cities' => 'array',
         ];
+    }
+
+    public function applications(): HasMany
+    {
+        return $this->hasMany(Application::class);
     }
 
     public function user(): BelongsTo
