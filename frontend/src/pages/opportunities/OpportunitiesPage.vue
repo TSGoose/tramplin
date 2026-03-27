@@ -13,8 +13,9 @@
       </UiAlert>
 
       <OpportunityFilters
-        v-model="catalogStore.filters"
+        :model-value="catalogStore.filters"
         :tags="catalogStore.tags"
+        @update:model-value="onUpdateFilters"
         @submit="onApplyFilters"
         @reset="onResetFilters"
       />
@@ -142,6 +143,16 @@ const mappableOpportunities = computed(() =>
     (item) => item.latitude !== null && item.longitude !== null,
   ),
 );
+
+function onUpdateFilters(value: {
+  search: string;
+  type: string;
+  work_format: string;
+  city: string;
+  tag: string;
+}): void {
+  Object.assign(catalogStore.filters, value);
+}
 
 async function onApplyFilters(): Promise<void> {
   await catalogStore.loadCatalog();

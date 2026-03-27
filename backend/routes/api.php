@@ -30,6 +30,8 @@ use App\Http\Controllers\Api\Curator\CuratorCompanyIndexController;
 use App\Http\Controllers\Api\Curator\CuratorCompanyModerationController;
 use App\Http\Controllers\Api\Curator\CuratorOpportunityIndexController;
 use App\Http\Controllers\Api\Curator\CuratorOpportunityModerationController;
+use App\Http\Controllers\Api\Admin\AdminCreateCuratorController;
+use App\Http\Controllers\Api\Admin\AdminUserIndexController;
 use App\Http\Controllers\Api\Tag\TagIndexController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
@@ -85,4 +87,7 @@ Route::middleware('auth:sanctum')->group(static function (): void {
     Route::patch('/curator/opportunities/{opportunity}/status', CuratorOpportunityModerationController::class);
 
     Route::get('/curator/audit-logs', CuratorAuditLogIndexController::class);
+
+    Route::get('/admin/users', AdminUserIndexController::class);
+    Route::post('/admin/users/curator', AdminCreateCuratorController::class);
 });

@@ -3,17 +3,15 @@
     <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
       <UiField label="Поиск">
         <UiInput
-          :model-value="modelValue.search"
+          v-model="localFilters.search"
           placeholder="Название, компания..."
-          @update:model-value="updateField('search', $event)"
         />
       </UiField>
 
       <UiField label="Тип">
         <select
-          :value="modelValue.type"
+          v-model="localFilters.type"
           class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-          @change="updateField('type', getSelectValue($event))"
         >
           <option value="">Все</option>
           <option value="vacancy">Вакансии</option>
@@ -25,9 +23,8 @@
 
       <UiField label="Формат">
         <select
-          :value="modelValue.work_format"
+          v-model="localFilters.work_format"
           class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-          @change="updateField('work_format', getSelectValue($event))"
         >
           <option value="">Все</option>
           <option value="office">Офис</option>
@@ -39,17 +36,15 @@
 
       <UiField label="Город">
         <UiInput
-          :model-value="modelValue.city"
+          v-model="localFilters.city"
           placeholder="Москва"
-          @update:model-value="updateField('city', $event)"
         />
       </UiField>
 
       <UiField label="Тег">
         <select
-          :value="modelValue.tag"
+          v-model="localFilters.tag"
           class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-          @change="updateField('tag', getSelectValue($event))"
         >
           <option value="">Все</option>
           <option v-for="tag in tags" :key="tag.id" :value="tag.slug">
@@ -60,38 +55,78 @@
     </div>
 
     <div class="mt-5 flex flex-wrap items-center gap-3">
-      <UiButton @click="$emit('submit')">Применить фильтры</UiButton>
-      <UiButton variant="secondary" @click="$emit('reset')">Сбросить</UiButton>
+      <UiButton @click="onSubmit">Применить фильтры</UiButton>
+      <UiButton variant="secondary" @click="onReset">Сбросить</UiButton>
     </div>
   </UiCard>
 </template>
 
 <script setup lang="ts">
+import { reactive, watch } from 'vue';
 import type { OpportunityFilters, OpportunityTag } from '@/entities/opportunity/model/types';
 import UiButton from '@/shared/ui/UiButton.vue';
 import UiCard from '@/shared/ui/UiCard.vue';
 import UiField from '@/shared/ui/UiField.vue';
 import UiInput from '@/shared/ui/UiInput.vue';
 
-const emit = defineEmits<{
-  submit: [];
-  reset: [];
-  'update:modelValue': [value: OpportunityFilters];
-}>();
-
 const props = defineProps<{
   modelValue: OpportunityFilters;
   tags: OpportunityTag[];
 }>();
 
-function updateField<K extends keyof OpportunityFilters>(key: K, value: OpportunityFilters[K]): void {
+const emit = defineEmits<{
+  'update:modelValue': [value: OpportunityFilters];
+  submit: [];
+  reset: [];
+}>();
+
+const localFilters = reactive<OpportunityFilters>({
+  search: '',
+  type: '',
+  work_format: '',
+  city: '',
+  tag: '',
+});
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    localFilters.search = value.search;
+    localFilters.type = value.type;
+    localFilters.work_format = value.work_format;
+    localFilters.city = value.city;
+    localFilters.tag = value.tag;
+  },
+  { immediate: true, deep: true },
+);
+
+function onSubmit(): void {
   emit('update:modelValue', {
-    ...props.modelValue,
-    [key]: value,
+    search: localFilters.search,
+    type: localFilters.type,
+    work_format: localFilters.work_format,
+    city: localFilters.city,
+    tag: localFilters.tag,
   });
+
+  emit('submit');
 }
 
-function getSelectValue(event: Event): string {
-  return (event.target as HTMLSelectElement).value;
+function onReset(): void {
+  localFilters.search = '';
+  localFilters.type = '';
+  localFilters.work_format = '';
+  localFilters.city = '';
+  localFilters.tag = '';
+
+  emit('update:modelValue', {
+    search: '',
+    type: '',
+    work_format: '',
+    city: '',
+    tag: '',
+  });
+
+  emit('reset');
 }
 </script>

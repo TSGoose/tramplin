@@ -31,6 +31,15 @@
 
       <div v-if="authStore.isAuthenticated && authStore.user" class="flex items-center gap-3">
         <RouterLink
+          v-if="authStore.user.role === 'admin'"
+          to="/admin/users"
+          class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"
+        >
+          Пользователи
+        </RouterLink>
+
+      
+        <RouterLink
           v-if="authStore.user.role === 'curator' || authStore.user.role === 'admin'"
           to="/curator/companies"
           class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:block"

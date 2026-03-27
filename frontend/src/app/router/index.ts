@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import HomePage from '@/pages/home/HomePage.vue';
 import LoginPage from '@/pages/auth/LoginPage.vue';
+import AdminUsersPage from '@/pages/admin/AdminUsersPage.vue';
 import CuratorLoginPage from '@/pages/auth/CuratorLoginPage.vue';
 import RegisterApplicantPage from '@/pages/auth/RegisterApplicantPage.vue';
 import RegisterEmployerPage from '@/pages/auth/RegisterEmployerPage.vue';
@@ -147,6 +148,15 @@ const routes: RouteRecordRaw[] = [
         meta: {
           requiresAuth: true,
           roles: ['employer'],
+        },
+      },
+      {
+        path: 'admin/users',
+        name: 'admin-users',
+        component: AdminUsersPage,
+        meta: {
+          requiresAuth: true,
+          roles: ['admin'],
         },
       },
     ],
