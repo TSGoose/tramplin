@@ -1,0 +1,70 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    container_name: tramplin-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/var/www/html
+      - ./backend/storage:/var/www/html/storage
+      - ./backend/bootstrap/cache:/var/www/html/bootstrap/cache
+    depends_on:
+      - postgres
+    networks:
+      - tramplin
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: tramplin-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: tramplin
+      POSTGRES_USER: tramplin
+      POSTGRES_PASSWORD: strong_password_here
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - tramplin
+
+  frontend-build:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_API_BASE_URL: /api
+        VITE_YANDEX_MAPS_API_KEY: ${VITE_YANDEX_MAPS_API_KEY:-}
+    container_name: tramplin-frontend-build
+    volumes:
+      - frontend-dist:/app/dist
+    command: sh -c "cp -r /app/dist/* /dist-output/"
+    networks:
+      - tramplin
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: tramplin-nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+      - frontend-build
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/default.prod.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./backend:/var/www/html:ro
+      - frontend-dist:/usr/share/nginx/html:ro
+    networks:
+      - tramplin
+
+networks:
+  tramplin:
+
+volumes:
+  postgres-data:
+  frontend-dist:

@@ -37,6 +37,7 @@ export interface Opportunity {
   salary_to: number | null;
   contacts_text: string | null;
   external_url: string | null;
+  moderation_comment: string | null;
   company: OpportunityCompany;
   tags: OpportunityTag[];
   status:
